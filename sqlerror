@@ -1,0 +1,28 @@
+#!/usr/bin/env groovy
+
+timestamps {
+    timeout(time: 5, unit: 'MINUTES') {
+        node('dev') {
+
+               checkout scm 
+               stash includes: 'procsql-sql.sh', name: 'my_sql_script'
+               sh(script: "procsql-sql.sh", returnStdout: true)
+
+        }
+
+        node('qa') {
+               
+               unstash 'my_sql_script'
+               sh(script: "sqlerror.sh", returnStdout: true)
+
+        }
+
+        node('prod') {
+
+                unstash 'my_sql_script'
+                sh(script: "procsql-sql.sh", returnStdout: true)
+
+        }
+
+    }
+}
