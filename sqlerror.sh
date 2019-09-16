@@ -1,5 +1,5 @@
 #!/bin/bash
-sqlplus -s fail/fil@localhost << EOF
+./sqlplus -s fail/fil@localhost << EOF
 REATE OR REPLACE PROCEDURE number_of_users AS
                 total_users NUMBER;
                 WHENEVER SQLERROR EXIT SQL.SQLCODE
